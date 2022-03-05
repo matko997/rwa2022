@@ -1,0 +1,20 @@
+body {
+    background-color: #eee
+}
+
+.nav-link:hover {
+    background-color: #525252 !important
+}
+
+.nav-link .fa {
+    transition: all 1s
+}
+
+.nav-link:hover .fa {
+    transform: rotate(360deg)
+}
+.card{
+    box-shadow: 0 2px 4px rgba(204,204,204,0.8);
+    padding: 20px 40px;
+}
+
