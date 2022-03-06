@@ -50,6 +50,7 @@ class User extends Authenticatable
         $this->attributes['password']=Hash::make($password);
     }
 
+
     public function roles()
     {
         return $this->belongsToMany('App\Models\Role');
@@ -82,6 +83,11 @@ class User extends Authenticatable
     public function schedule()
     {
         return $this->belongsToMany(Schedule::class);
+    }
+
+    public function appointments()
+    {
+        return $this->belongsToMany(Appointment::class);
     }
 
 }

@@ -2,13 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+
+
 use Illuminate\Validation\ValidationException;
+use Illuminate\Support\Facades\Auth;
 
 
 class SessionsController extends Controller
 {
-    //
+
     public function destroy()
     {
         auth()->logout();
@@ -27,7 +29,7 @@ class SessionsController extends Controller
             'password'=>'required'
         ]);
 
-        if(Auth()->attempt($attributes))
+        if(Auth::attempt($attributes))
         {
             $user=Auth()->user();
             if($user->hasRole('admin'))
@@ -36,14 +38,16 @@ class SessionsController extends Controller
             }
             else
             {
-                return redirect('/');
+                return redirect(route('home'));
             }
         }
+        else
+        {
+            throw ValidationException::withMessages([
+                'email'=>'Your provided credentials could not be verifed.'
+            ]);
 
-
-        throw ValidationException::withMessages([
-            'email'=>'Your provided credentials could not be verifed.'
-        ]);
+        }
 
 
     }

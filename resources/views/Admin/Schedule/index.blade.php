@@ -8,12 +8,19 @@
                 <a class="btn btn-sm btn-success float-md-end" href="{{route('admin.schedule.create')}}" role="button">Create</a>
             </div>
         </div>
-        <div class="row justify-content-lg-start mt-3">
-            <div class="col-lg-3 col-sm-6">
-                <label for="date">Date</label>
-                <input class="form-control" type="date" name="datePicked"/>
+
+        <form class="mx-auto border-0" method="GET" action="{{url('admin/schedule/',Request::input('datePicked'))}}">
+            <div class="row justify-content-lg-start mt-4 w-50">
+                <div class="col-sm-6 p-0">
+                    <label for="date">Date</label>
+                    <input class="form-control" type="date" name="datePicked">
+                </div>
+                <div class="col-sm-6 p-0">
+                    <button class="btn btn-md btn-info text-white mt-4 ms-1" type="submit">Filter</button>
+                </div>
             </div>
-        </div>
+        </form>
+
 
         <div class="row">
                 <div class="card mt-4">

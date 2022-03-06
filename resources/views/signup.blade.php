@@ -7,7 +7,7 @@
                 <div class="card">
                     <h2 class="card-title mt-2 m-lg-2">Register</h2>
                     <div class="card-body">
-                        <form action="/signup" class="form-control mx-auto border-0"  method="POST">
+                        <form action="{{route('signup')}}" class="form-control mx-auto border-0"  method="POST">
                             @csrf
                             <label for="name" class="form-label">Name</label>
                             <input type="text" class="form-control" id="name" name="name" placeholder="Enter name" value="{{old('name')}}">

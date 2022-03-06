@@ -5,7 +5,7 @@
 <div class="container  ">
     <div class="row">
         <div class="col-md mt-5 ">
-            <form action="/login" method="post" class="form-control mx-auto " style="width: 70%;">
+            <form action="{{route('login')}}" method="POST" class="form-control mx-auto " style="width: 70%;">
                 @csrf
                 <h2 class="text-center">Login</h2>
                 <label for="email" class="form-label">Email</label>

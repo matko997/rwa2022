@@ -2,16 +2,13 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Models\Appointment;
+use App\Http\Requests\StoreAppointmentRequest;
+use App\Http\Requests\UpdateAppointmentRequest;
 use App\Http\Controllers\Controller;
-use App\Models\Schedule;
-use App\Models\User;
-use Carbon\Carbon;
-use Carbon\CarbonInterval;
 use Illuminate\Http\Request;
 
-
-
-class ScheduleController extends Controller
+class AppointmentController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -20,12 +17,11 @@ class ScheduleController extends Controller
      */
     public function index()
     {
-        $schedules=Schedule::with('users')->paginate(10);
+        $appointments=Appointment::with('patients','doctors','services')->paginate(10);
 
-        return view('Admin.Schedule.index')->with(['schedules'=>$schedules]);
-
+        dd($appointments);
+        return view('Admin.Appointment.index')->with(['appointments'=>$appointments]);
     }
-
 
     /**
      * Show the form for creating a new resource.
@@ -34,34 +30,27 @@ class ScheduleController extends Controller
      */
     public function create()
     {
-        $doctors=User::whereHas('roles', function($q)
-        {
-            $q->where('name', 'doctor');
-        })->get();
-
-        return view('Admin.Schedule.create')->with(['doctors'=>$doctors]);
+        //
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Http\Requests\StoreAppointmentRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreAppointmentRequest $request)
     {
-        Schedule::create($request->except('_token'));
-        return redirect(route('admin.schedule.index'));
-
+        //
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\Models\Appointment  $appointment
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Appointment $appointment)
     {
         //
     }
@@ -69,10 +58,10 @@ class ScheduleController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\Models\Appointment  $appointment
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Appointment $appointment)
     {
         //
     }
@@ -80,11 +69,11 @@ class ScheduleController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \App\Http\Requests\UpdateAppointmentRequest  $request
+     * @param  \App\Models\Appointment  $appointment
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(UpdateAppointmentRequest $request, Appointment $appointment)
     {
         //
     }
@@ -92,17 +81,11 @@ class ScheduleController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  \App\Models\Appointment  $appointment
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Appointment $appointment)
     {
         //
     }
-
-    public function filter(Request $request)
-    {
-
-    }
-
 }

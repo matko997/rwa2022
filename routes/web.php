@@ -8,6 +8,12 @@ use \App\Http\Controllers\HomeController;
 use \App\Http\Controllers\Admin\DashboardController;
 use \App\Http\Controllers\Admin\DoctorController;
 use \App\Http\Controllers\Admin\ScheduleController;
+use \App\Http\Controllers\Admin\ServiceController;
+use \App\Http\Controllers\Admin\AppointmentController;
+
+
+
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -21,19 +27,20 @@ use \App\Http\Controllers\Admin\ScheduleController;
 
 //Home page routes
 
-Route::get('/', [HomeController::class,'index']);
+Route::get('/', [HomeController::class,'index'])->name('home');
 
-Route::get("/about",[HomeController::class,'about']);
-
-
-Route::get('/signup',[SignupController::class,'create'])->middleware('guest');
-Route::post('/signup',[SignupController::class,'store'])->middleware('guest');
+Route::get("/about",[HomeController::class,'about'])->name('about');
 
 
-Route::get('/login',[SessionsController::class,'create'])->middleware('guest');
-Route::post('/login',[SessionsController::class,'store'])->middleware('guest');
+Route::get('/signup',[SignupController::class,'create'])->name('signupForm')->middleware('guest');
+Route::post('/signup',[SignupController::class,'store'])->name('signup')->middleware('guest');
 
-Route::post('/logout',[SessionsController::class,'destroy'])->middleware('auth');
+
+Route::get('/login',[SessionsController::class,'create'])->name('loginForm')->middleware('guest');
+Route::post('/login',[SessionsController::class,'store'])->name('login')->middleware('guest');
+
+Route::post('/logout',[SessionsController::class,'destroy'])->name('logout')->middleware('auth');
+
 
 
 //Admin routes
@@ -42,6 +49,9 @@ Route::prefix('admin')->name('admin.')->group(function()
     Route::resource('/patient',PatientController::class);
     Route::resource('/doctor',DoctorController::class);
     Route::resource('/schedule',ScheduleController::class);
+    Route::resource('/service',ServiceController::class);
+    Route::resource('/appointment',AppointmentController::class);
+    Route::get('/schedule/{filter}',[ScheduleController::class,'filter'])->name('filter');
     Route::get('/dashboard',[DashboardController::class,'index']);
 
 });

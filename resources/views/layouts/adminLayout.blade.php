@@ -41,8 +41,13 @@
                             <i class="fs-4 bi-table"></i> <span class="ms-1 d-none d-sm-inline">Schedules</span></a>
                     </li>
                     <li>
-                        <a href="#submenu2" data-bs-toggle="collapse" class="nav-link px-0 align-middle text-white">
-                            <i class="fs-4 bi-bootstrap"></i> <span class="ms-1 d-none d-sm-inline">Appointments</span></a>
+                        <a href="{{route('admin.appointment.index')}}"  class="nav-link px-0 align-middle text-white">
+                            <i class="fs-4 bi-table"></i> <span class="ms-1 d-none d-sm-inline">Appointments</span></a>
+                    </li>
+
+                    <li>
+                        <a href="{{route('admin.service.index')}}" class="nav-link px-0 align-middle text-white">
+                            <i class="fs-4 bi-table"></i> <span class="ms-1 d-none d-sm-inline">Services</span></a>
                     </li>
 
                     <li>
@@ -59,6 +64,5 @@
     </div>
 </div>
 </body>
-
 
 </html>

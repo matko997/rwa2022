@@ -20,39 +20,36 @@
 <body>
 <nav class="navbar navbar-expand-lg navbar-light bg-info">
     <div class="container-fluid">
-        <a class="navbar-brand " href="/" style="font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif; font-size: x-large; font-weight: 500;">Dental clinic</a>
+        <a class="navbar-brand " href="{{route('home')}}" style="font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif; font-size: x-large; font-weight: 500;">Dental clinic</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav">
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="/">Home</a>
+                    <a class="nav-link active" aria-current="page" href="{{route('home')}}">Home</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link"  href="/about">About</a>
+                    <a class="nav-link"  href="{{route('about')}}">About</a>
                 </li>
 
             </ul>
             <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                 @guest()
                     <li class="nav-item">
-                        <a class="nav-link" href="/signup"><span><i class="fa fa-user"></i>Sign Up</span> </a>
+                        <a class="nav-link" href="{{route('signupForm')}}"><span><i class="fa fa-user"></i>Sign Up</span> </a>
                     </li>
 
                     <li class="nav-item ">
-                        <a class="nav-link" href="/login"><span><i class="fa fa-sign-in" aria-hidden="true"></i>Login</span> </a>
+                        <a class="nav-link" href="{{route('loginForm')}}"><span><i class="fa fa-sign-in" aria-hidden="true"></i>Login</span> </a>
                     </li>
                 @else
                     <div class="d-flex">
-                        <form method="POST" action="/logout">
+                        <form method="POST" action="{{route('logout')}}">
                             @csrf
-                            <span class="small text-uppercase fw-bold text-align mt-2 mr-2">Welcome, {{auth()->user()->name}}!</span>
+                            <span class="small text-uppercase fw-bold text-align mt-2 mr-2"> {{auth()->user()->name}}!</span>
                             <button type="submit" class="btn btn-outline-dark">Logout</button>
                         </form>
-
-
-
                     </div>
                 @endguest
             </ul>
@@ -60,9 +57,6 @@
         </div>
     </div>
 </nav>
-
-
-
 
 <br> <br>
 

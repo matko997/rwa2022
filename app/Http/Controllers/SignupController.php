@@ -23,8 +23,6 @@ class SignupController extends Controller
             'rPassword'=>'required|max:255|min:8|same:password'
         ]);
 
-       $attributes['password']=bcrypt($attributes['password']);
-
 
     $user=User::create($attributes);
     $user->assignRole('patient');
