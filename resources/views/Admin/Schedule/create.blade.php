@@ -9,15 +9,18 @@
                     <div class="card-body">
                         <form action="{{route('admin.schedule.store')}}" class="form-control mx-auto border-0"  method="POST">
                             @csrf
-                            <div class="form-group">
-                                <div class='input-group date' id='datetimepicker1'>
-                                    <input type='text' class="form-control" />
-                                    <span class="input-group-addon">
-                                    <span class="glyphicon glyphicon-calendar"></span>
-                                    </span>
-                                </div>
-                                <button type="submit" class="btn btn-primary mt-2">Create</button>
-                            </div>
+                                <label for="startDate">Start</label>
+                                <input name="from" class="form-control" type="datetime-local" />
+                                <label for="startDate">Start</label>
+                                <input name="to" class="form-control" type="datetime-local" />
+                            <label></label>
+                            <select class="form-select" name="user_id" required>
+                                <option value="">Pick a doctor</option>
+                                @foreach($doctors as $doctor)
+                                    <option value="{{ $doctor->id }}"> {{ $doctor->name }}</option>
+                                @endforeach
+                            </select>
+                            <button type="submit" class="btn btn-primary mt-2">Create</button>
                         </form>
                     </div>
                 </div>

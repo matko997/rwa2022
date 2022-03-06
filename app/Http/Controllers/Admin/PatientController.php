@@ -18,7 +18,7 @@ class PatientController extends Controller
         $patients=User::whereHas('roles', function($q)
         {
             $q->where('name', 'patient');
-        })->paginate(13);
+        })->paginate(10);
         return view('Admin.Patient.index')->with(['patients'=>$patients]);
     }
 
@@ -40,6 +40,7 @@ class PatientController extends Controller
      */
     public function store(Request $request)
     {
+
         $user=User::create($request->except('_token'));
         $user->roles()->attach(2);
 

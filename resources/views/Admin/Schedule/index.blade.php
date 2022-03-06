@@ -8,8 +8,14 @@
                 <a class="btn btn-sm btn-success float-md-end" href="{{route('admin.schedule.create')}}" role="button">Create</a>
             </div>
         </div>
+        <div class="row justify-content-lg-start mt-3">
+            <div class="col-lg-3 col-sm-6">
+                <label for="date">Date</label>
+                <input class="form-control" type="date" name="datePicked"/>
+            </div>
+        </div>
+
         <div class="row">
-            <div class="col-md">
                 <div class="card mt-4">
                     <div class="card-body">
                         <table class="table mt-5">
@@ -27,8 +33,8 @@
                                 <tr>
                                     <td>{{$schedule->id}}</td>
                                     <td>{{$schedule->users->name.' '.$schedule->users->surname}}</td>
-                                    <td>{{$schedule->from}}</td>
-                                    <td>{{$schedule->to}}</td>
+                                    <td>{{ \Carbon\Carbon::parse($schedule->from)->format('H:i') }}</td>
+                                    <td>{{ \Carbon\Carbon::parse($schedule->to)->format('H:i') }}</td>
                                     <td>
                                         <a class="btn btn-sm btn-primary" href="{{route('admin.schedule.edit',$schedule->id)}}" role="button">Edit</a>
                                         <button type="button" class="btn btn-sm btn-danger" onclick="event.preventDefault(); document.getElementById('delete-schedule-{{$schedule->id}}').submit()">
@@ -43,6 +49,7 @@
                             @endforeach
                             </tbody>
                         </table>
+                        {{$schedules->links()}}
                     </div>
                 </div>
             </div>

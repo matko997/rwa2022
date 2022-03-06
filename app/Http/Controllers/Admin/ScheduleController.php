@@ -5,8 +5,10 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Schedule;
 use App\Models\User;
+use Carbon\Carbon;
+use Carbon\CarbonInterval;
 use Illuminate\Http\Request;
-use PhpParser\Node\Expr\Array_;
+
 
 
 class ScheduleController extends Controller
@@ -18,7 +20,7 @@ class ScheduleController extends Controller
      */
     public function index()
     {
-        $schedules=Schedule::with('users')->get();
+        $schedules=Schedule::with('users')->paginate(10);
 
         return view('Admin.Schedule.index')->with(['schedules'=>$schedules]);
 
@@ -32,7 +34,12 @@ class ScheduleController extends Controller
      */
     public function create()
     {
-        return view('Admin.Schedule.create');
+        $doctors=User::whereHas('roles', function($q)
+        {
+            $q->where('name', 'doctor');
+        })->get();
+
+        return view('Admin.Schedule.create')->with(['doctors'=>$doctors]);
     }
 
     /**
@@ -43,7 +50,13 @@ class ScheduleController extends Controller
      */
     public function store(Request $request)
     {
-        //
+
+
+        Schedule::create($request->except('_token'));
+
+
+        return redirect(route('admin.schedule.index'));
+
     }
 
     /**

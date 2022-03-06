@@ -19,7 +19,7 @@ class DoctorController extends Controller
         $doctors=User::whereHas('roles', function($q)
         {
             $q->where('name', 'doctor');
-        })->paginate(13);
+        })->paginate(10);
 
         return view('Admin.Doctor.index')->with(['doctors'=>$doctors]);
     }

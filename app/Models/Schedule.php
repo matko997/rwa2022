@@ -11,6 +11,12 @@ class Schedule extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'user_id',
+        'from',
+        'to'
+    ];
+
     public function users()
     {
         return $this->belongsTo(User::class,'user_id');
