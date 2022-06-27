@@ -9,11 +9,11 @@
             </div>
         </div>
 
-        <form class="mx-auto border-0" method="GET" action="{{url('admin/schedule/',Request::input('datePicked'))}}">
+        <form class="mx-auto border-0" method="GET" action="{{route('admin.schedule.index',[$date_picked ?? ''])}}">
             <div class="row justify-content-lg-start mt-4 w-50">
                 <div class="col-sm-6 p-0">
                     <label for="date">Date</label>
-                    <input class="form-control" type="date" name="datePicked">
+                    <input class="form-control" type="date" name="datePicked" id="datePicked">
                 </div>
                 <div class="col-sm-6 p-0">
                     <button class="btn btn-md btn-info text-white mt-4 ms-1" type="submit">Filter</button>
@@ -40,10 +40,9 @@
                                 <tr>
                                     <td>{{$schedule->id}}</td>
                                     <td>{{$schedule->users->name.' '.$schedule->users->surname}}</td>
-                                    <td>{{ \Carbon\Carbon::parse($schedule->from)->format('H:i') }}</td>
-                                    <td>{{ \Carbon\Carbon::parse($schedule->to)->format('H:i') }}</td>
+                                    <td>{{ Carbon\Carbon::parse($schedule->from)->format('H:i') }}</td>
+                                    <td>{{ Carbon\Carbon::parse($schedule->to)->format('H:i') }}</td>
                                     <td>
-                                        <a class="btn btn-sm btn-primary" href="{{route('admin.schedule.edit',$schedule->id)}}" role="button">Edit</a>
                                         <button type="button" class="btn btn-sm btn-danger" onclick="event.preventDefault(); document.getElementById('delete-schedule-{{$schedule->id}}').submit()">
                                             Delete
                                         </button>

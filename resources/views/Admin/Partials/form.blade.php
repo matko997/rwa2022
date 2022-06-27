@@ -1,4 +1,3 @@
-
 @csrf
 <label for="name" class="form-label">Name</label>
 <input type="text" class="form-control" id="name" name="name" placeholder="Enter name" value="{{old('name')}}@isset($doctor){{$doctor->name}}@endisset @isset($patient){{$patient->name}}@endisset">

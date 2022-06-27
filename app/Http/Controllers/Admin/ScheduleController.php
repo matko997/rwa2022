@@ -6,9 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Schedule;
 use App\Models\User;
 use Carbon\Carbon;
-use Carbon\CarbonInterval;
 use Illuminate\Http\Request;
-
 
 
 class ScheduleController extends Controller
@@ -18,12 +16,17 @@ class ScheduleController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $schedules=Schedule::with('users')->paginate(10);
-
-        return view('Admin.Schedule.index')->with(['schedules'=>$schedules]);
-
+        $date = $request->input('datePicked');
+        if($date==''){
+            $schedules=Schedule::with('users')->paginate(10);
+            return view('Admin.Schedule.index')->with(['schedules'=>$schedules]);
+        }else{
+            $parsedDate = Carbon::parse($date)->format('Y-m-d');
+            $schedules=Schedule::with('users')->whereDate('from','like',$parsedDate)->paginate(10);
+            return view('Admin.Schedule.index')->with(['schedules'=>$schedules]);
+        }
     }
 
 
@@ -97,12 +100,9 @@ class ScheduleController extends Controller
      */
     public function destroy($id)
     {
-        //
+        Schedule::destroy($id);
+        return redirect(route('admin.schedule.index'));
     }
 
-    public function filter(Request $request)
-    {
-
-    }
 
 }

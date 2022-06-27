@@ -20,7 +20,6 @@ class DoctorController extends Controller
         {
             $q->where('name', 'doctor');
         })->paginate(10);
-
         return view('Admin.Doctor.index')->with(['doctors'=>$doctors]);
     }
 

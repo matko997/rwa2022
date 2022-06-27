@@ -11,9 +11,6 @@ use \App\Http\Controllers\Admin\ScheduleController;
 use \App\Http\Controllers\Admin\ServiceController;
 use \App\Http\Controllers\Admin\AppointmentController;
 
-
-
-
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -42,7 +39,6 @@ Route::post('/login',[SessionsController::class,'store'])->name('login')->middle
 Route::post('/logout',[SessionsController::class,'destroy'])->name('logout')->middleware('auth');
 
 
-
 //Admin routes
 Route::prefix('admin')->name('admin.')->group(function()
 {
@@ -51,7 +47,8 @@ Route::prefix('admin')->name('admin.')->group(function()
     Route::resource('/schedule',ScheduleController::class);
     Route::resource('/service',ServiceController::class);
     Route::resource('/appointment',AppointmentController::class);
-    Route::get('/schedule/{filter}',[ScheduleController::class,'filter'])->name('filter');
+    Route::post('/appointment/store',[AppointmentController::class,'store'])->name('appointment.store');
+    Route::post('/appointment/getDoctorId',[AppointmentController::class,'getDoctorId'])->name('appointment.getDoctorId');
     Route::get('/dashboard',[DashboardController::class,'index']);
 
 });

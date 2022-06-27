@@ -9,6 +9,13 @@ class Appointment extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'doctor_id',
+        'patient_id',
+        'start_time',
+        'end_time'
+    ];
+
     public function services()
     {
         return $this->belongsToMany(Service::class);
