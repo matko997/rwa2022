@@ -23,6 +23,7 @@ class User extends Authenticatable
         'email',
         'surname',
         'gender',
+        'phoneNumber',
         'password'
     ];
 
@@ -47,7 +48,7 @@ class User extends Authenticatable
 
     public function setPasswordAttribute($password)
     {
-        $this->attributes['password']=Hash::make($password);
+        $this->attributes['password'] = Hash::make($password);
     }
 
 
@@ -55,29 +56,25 @@ class User extends Authenticatable
     {
         return $this->belongsToMany('App\Models\Role');
     }
-    public function hasAnyRoles($roles)
+
+    public function hasAnyRole($role)
     {
-        if ($this->roles()->whereIn('name', $roles)->first()) {
-            return true;
-        }
-        return false;
+        return null !== $this->roles()->where('name', $role)->first();
     }
 
-    public function hasRole($role)
+    public function hasAnyRoles(array $role)
     {
-        if ($this->roles()->where('name', $role)->first()) {
-            return true;
-        }
-        return false;
+        return null !== $this->roles()->whereIn('name', $role)->first();
     }
 
     public function assignRole($role)
     {
-        $this->roles()->syncWithoutDetaching(Role::where('name',$role)->firstOrFail()->id);
+        $this->roles()->syncWithoutDetaching(Role::where('name', $role)->firstOrFail()->id);
     }
+
     public function detachRole($role)
     {
-        $this->roles()->detach(Role::where('name',$role)->firstOrFail()->id);
+        $this->roles()->detach(Role::where('name', $role)->firstOrFail()->id);
     }
 
     public function schedule()

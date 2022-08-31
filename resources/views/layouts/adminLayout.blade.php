@@ -19,6 +19,49 @@
 
     <script type="text/javascript" charset="utf8"
             src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
+    <style>
+        .pendingBtn {
+            width: 100px;
+            height: 30px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            background-color: #008CBA;
+            color: white;
+            border-radius: 6px;
+            padding: 3px 3px;
+            border: none;
+            cursor: none;
+        }
+
+        .canceledBtn {
+            width: 100px;
+            height: 30px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            background-color: #f44336;
+            color: white;
+            border-radius: 6px;
+            padding: 3px 3px;
+            border: none;
+            cursor: none;
+        }
+
+        .finishedBtn {
+            width: 100px;
+            height: 30px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            background-color: #5aeea9;
+            color: white;
+            border-radius: 6px;
+            padding: 3px 3px;
+            border: none;
+            cursor: none;
+        }
+    </style>
 </head>
 <body>
 <div class="container-fluid">
@@ -30,39 +73,57 @@
                     <span class="fs-2 d-none d-sm-inline">Dashboard</span>
                 </a>
                 <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start" id="menu">
-
-                    <li>
-                        <a href="#submenu1" data-bs-toggle="collapse" class="nav-link px-0 align-middle text-white">
-                            <i class="fs-4 bi-speedometer2"></i> <span class="ms-1 d-none d-sm-inline">Users</span> </a>
-                        <ul class="collapse show nav flex-column ms-1" id="submenu1" data-bs-parent="#menu">
-                            <li class="w-100">
-                                <a href="{{route('admin.doctor.index')}}" class="nav-link px-0 text-white"> <span
-                                        class="d-none d-sm-inline">Doctors</span> </a>
-                            </li>
-                            <li>
-                                <a href="{{route('admin.patient.index')}}" class="nav-link px-0 text-white"> <span
-                                        class="d-none d-sm-inline">Patients</span> </a>
-                            </li>
-                        </ul>
-                    </li>
+                    @can('is-admin')
+                        <li>
+                            <a href="#submenu1" data-bs-toggle="collapse" class="nav-link px-0 align-middle text-white">
+                                <i class="fs-4 bi-speedometer2"></i> <span class="ms-1 d-none d-sm-inline">Users</span>
+                            </a>
+                            <ul class="collapse show nav flex-column ms-1" id="submenu1" data-bs-parent="#menu">
+                                <li class="w-100">
+                                    <a href="{{route('admin.doctor.index')}}" class="nav-link px-0 text-white"> <span
+                                            class="d-none d-sm-inline">Doctors</span> </a>
+                                </li>
+                                <li>
+                                    <a href="{{route('admin.patient.index')}}" class="nav-link px-0 text-white"> <span
+                                            class="d-none d-sm-inline">Patients</span> </a>
+                                </li>
+                            </ul>
+                        </li>
+                    @endcan
                     <li>
                         <a href="{{route('admin.schedule.index')}}" class="nav-link px-0 align-middle text-white">
-                            <i class="fs-4 bi-table"></i> <span class="ms-1 d-none d-sm-inline">Schedules</span></a>
+                            <i class="fs-4 bi-table"></i>
+                            @if(\Illuminate\Support\Facades\Auth::user()->hasAnyRole('admin'))
+                                Schedules</span>
+                            @else
+                                <span class="ms-1 d-none d-sm-inline">My schedules</span>
+                            @endif
+                        </a>
                     </li>
                     <li>
                         <a href="{{route('admin.appointment.index')}}" class="nav-link px-0 align-middle text-white">
-                            <i class="fs-4 bi-table"></i> <span class="ms-1 d-none d-sm-inline">Appointments</span></a>
+                            <i class="fs-4 bi-table"></i> @if(\Illuminate\Support\Facades\Auth::user()->hasAnyRole('admin'))
+                                Appointments</span>
+                            @else
+                                <span class="ms-1 d-none d-sm-inline">My appointments</span>
+                            @endif</a>
                     </li>
+                    @can('is-admin')
+                        <li>
+                            <a href="{{route('admin.service.index')}}" class="nav-link px-0 align-middle text-white">
+                                <i class="fs-4 bi-table"></i> <span class="ms-1 d-none d-sm-inline">Services</span></a>
+                        </li>
+                    @endcan
 
-                    <li>
-                        <a href="{{route('admin.service.index')}}" class="nav-link px-0 align-middle text-white">
-                            <i class="fs-4 bi-table"></i> <span class="ms-1 d-none d-sm-inline">Services</span></a>
-                    </li>
 
-                    <li>
-                        <a href="#" class="nav-link px-0 align-middle text-white">
-                            <i class="fs-4 bi-people"></i> <span class="ms-1 d-none d-sm-inline">Roles</span> </a>
-                    </li>
+                    <span
+                        class="h4 text-align mt-2 mr-2">{{\Illuminate\Support\Facades\Auth::user()->name}}
+                    </span>
+                    <form method="POST" action="{{route('logout')}}" class="position-relative">
+                        @csrf
+                        <button type="submit" class="btn btn-sm btn-primary">Logout
+                        </button>
+                    </form>
                 </ul>
 
             </div>
@@ -82,11 +143,39 @@
                 type: 'post',
                 data: 'doctor_id=' + doctor_id + '&_token={{csrf_token()}}',
                 success: function (result) {
-                    $('#schedule_id').html(result);
+                    $('#date').html(result);
                 }
             })
         });
     });
+
+    $(document).ready(function () {
+        $('#date').change(function () {
+            var services = [];
+
+            $('.services:checked').each(function () {
+                services.push($(this).val());
+            })
+
+            let date = $('#date').find(":selected").text();
+            let doctor_ID = $('#doctor_id').find(":selected").val();
+
+            $.ajax({
+                url: '/admin/appointment/getDate',
+                type: 'post',
+                data: 'from=' + date + '&doctor_id=' + doctor_ID + '&services=' + services + '&_token={{csrf_token()}}',
+                success: function (result) {
+                    $('#time').html(result);
+                }
+            })
+        });
+    });
+    $(document).ready(function () {
+        $('.services').on('click', function () {
+            document.getElementById("date").selectedIndex = 0;
+        });
+    });
+
 
     $(document).ready(function () {
         $('body').on('click', '#show-appointment', function () {
@@ -100,20 +189,35 @@
                 $('#appointment-end').text(data.end_time);
                 $('#appointment-price').text(data.price);
 
-                for(var i=0;i<data.services.length;i++){
+                for (var i = 0; i < data.services.length; i++) {
                     var ul = document.getElementById("appointment-service");
                     var li = document.createElement("li");
                     li.appendChild(document.createTextNode(data.services[i].name));
                     ul.appendChild(li);
                 }
-
-
-
-
                 console.log(data);
-
             })
         });
     });
+
+    $(document).ready(function () {
+        $('body').on('click', '#close-modal', function () {
+            $('#appointment-service').empty();
+        });
+    });
+
+    $(document).ready(function () {
+        $('#checkBtn').click(function () {
+            checked = $("input[type=checkbox]:checked").length;
+
+            if (!checked) {
+                alert("You must check at least one service.");
+                return false;
+            }
+
+        });
+    });
+
+
 </script>
 </html>

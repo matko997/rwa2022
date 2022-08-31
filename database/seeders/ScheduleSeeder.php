@@ -37,6 +37,7 @@ class ScheduleSeeder extends Seeder
                 'from'=>$date->format('y-m-d H:i'),
                 'to'=>$date->addMinutes('15')->format('y-m-d H:i'),
                 'user_id'=>$doctors->random(),
+                'created_at'=>now()
             ]);
         }
 

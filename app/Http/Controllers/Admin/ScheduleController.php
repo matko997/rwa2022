@@ -3,10 +3,12 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Appointment;
 use App\Models\Schedule;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 
 class ScheduleController extends Controller
@@ -18,15 +20,36 @@ class ScheduleController extends Controller
      */
     public function index(Request $request)
     {
+//        $date = $request->input('datePicked');
+//        if ($date == '') {
+//            $schedules = Schedule::with('users')->paginate(10);
+//            return view('Admin.Schedule.index')->with(['schedules' => $schedules]);
+//        } else {
+//            $parsedDate = Carbon::parse($date)->format('Y-m-d');
+//            $schedules = Schedule::with('users')->whereDate('from', 'like', $parsedDate)->paginate(10);
+//            return view('Admin.Schedule.index')->with(['schedules' => $schedules]);
+//        }
+
         $date = $request->input('datePicked');
-        if($date==''){
-            $schedules=Schedule::with('users')->paginate(10);
-            return view('Admin.Schedule.index')->with(['schedules'=>$schedules]);
-        }else{
-            $parsedDate = Carbon::parse($date)->format('Y-m-d');
-            $schedules=Schedule::with('users')->whereDate('from','like',$parsedDate)->paginate(10);
-            return view('Admin.Schedule.index')->with(['schedules'=>$schedules]);
+        $parsedDate = Carbon::parse($date)->format('Y-m-d');
+
+        $loggedUserId = Auth::user()->id;
+        $loggedInUser = User::find($loggedUserId);
+        if ($date == '') {
+            if ($loggedInUser->hasAnyRole('admin')) {
+                $schedules = Schedule::with('users')->whereDate('from',\Illuminate\Support\Carbon::today())->paginate(10);
+            } else {
+                $schedules = Schedule::with('users')->where('user_id', $loggedInUser)->whereDate('from',\Illuminate\Support\Carbon::today())->paginate(10);
+            }
+        } else {
+            if ($loggedInUser->hasAnyRole('admin')) {
+                $schedules = Schedule::with('users')->whereDate('from', $parsedDate)->paginate(10);
+            } else {
+                $schedules = Schedule::with('users')->whereDate('from', $parsedDate)->where('user_id', Auth::user()->id)->paginate(10);
+            }
         }
+
+        return view('Admin.Schedule.index')->with(['schedules' => $schedules]);
     }
 
 
@@ -37,18 +60,17 @@ class ScheduleController extends Controller
      */
     public function create()
     {
-        $doctors=User::whereHas('roles', function($q)
-        {
+        $doctors = User::whereHas('roles', function ($q) {
             $q->where('name', 'doctor');
         })->get();
 
-        return view('Admin.Schedule.create')->with(['doctors'=>$doctors]);
+        return view('Admin.Schedule.create')->with(['doctors' => $doctors]);
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -61,7 +83,7 @@ class ScheduleController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -72,7 +94,7 @@ class ScheduleController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
@@ -83,8 +105,8 @@ class ScheduleController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param \Illuminate\Http\Request $request
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
@@ -95,7 +117,7 @@ class ScheduleController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)

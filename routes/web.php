@@ -11,6 +11,7 @@ use \App\Http\Controllers\Admin\ScheduleController;
 use \App\Http\Controllers\Admin\ServiceController;
 use \App\Http\Controllers\Admin\AppointmentController;
 
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -24,32 +25,48 @@ use \App\Http\Controllers\Admin\AppointmentController;
 
 //Home page routes
 
-Route::get('/', [HomeController::class,'index'])->name('home');
+Route::get('/', [HomeController::class, 'index'])->name('home');
 
-Route::get("/about",[HomeController::class,'about'])->name('about');
+Route::get("/about", [HomeController::class, 'about'])->name('about');
 
-
-Route::get('/signup',[SignupController::class,'create'])->name('signupForm')->middleware('guest');
-Route::post('/signup',[SignupController::class,'store'])->name('signup')->middleware('guest');
+Route::get("/doctors", [HomeController::class, 'doctors'])->name('doctors');
 
 
-Route::get('/login',[SessionsController::class,'create'])->name('loginForm')->middleware('guest');
-Route::post('/login',[SessionsController::class,'store'])->name('login')->middleware('guest');
-
-Route::post('/logout',[SessionsController::class,'destroy'])->name('logout')->middleware('auth');
+Route::get('/signup', [SignupController::class, 'create'])->name('signupForm')->middleware('guest');
+Route::post('/signup', [SignupController::class, 'store'])->name('signup')->middleware('guest');
 
 
-//Admin routes
-Route::prefix('admin')->name('admin.')->group(function()
-{
-    Route::resource('/patient',PatientController::class);
-    Route::resource('/doctor',DoctorController::class);
-    Route::resource('/schedule',ScheduleController::class);
-    Route::resource('/service',ServiceController::class);
-    Route::resource('/appointment',AppointmentController::class);
-    Route::post('/appointment/store',[AppointmentController::class,'store'])->name('appointment.store');
-    Route::post('/appointment/getDoctorId',[AppointmentController::class,'getDoctorId'])->name('appointment.getDoctorId');
-    Route::get('/dashboard',[DashboardController::class,'index']);
+Route::get('/login', [SessionsController::class, 'create'])->name('loginForm')->middleware('guest');
+Route::post('/login', [SessionsController::class, 'store'])->name('login')->middleware('guest');
+
+Route::post('/logout', [SessionsController::class, 'destroy'])->name('logout')->middleware('auth');
+Route::post('admin/appointment/getDate', [AppointmentController::class, 'getDate'])->name('admin.appointment.getDate');
+Route::get('patient/services', [App\Http\Controllers\Patient\AppointmentController::class, 'getServices'])->name('services');
+
+
+//Admin and doctor routes
+Route::prefix('admin')->middleware(['auth', 'auth.isAdminOrDoctor'])->name('admin.')->group(function () {
+    Route::resource('/patient', PatientController::class);
+    Route::resource('/doctor', DoctorController::class);
+    Route::resource('/schedule', ScheduleController::class);
+    Route::resource('/service', ServiceController::class);
+    Route::resource('/appointment', AppointmentController::class);
+    Route::post('/appointment/store', [AppointmentController::class, 'store'])->name('appointment.store');
+    Route::post('/appointment/getDoctorId', [AppointmentController::class, 'getDoctorId'])->name('appointment.getDoctorId');
+    Route::get('/appointment/getServiceData', [AppointmentController::class, 'getServiceDuration'])->name('appointment.getServiceDuration');
+    Route::get('/dashboard', [DashboardController::class, 'index']);
+});
+
+//Patient routes
+//->middleware(['auth','auth.isPatient'])
+Route::prefix('patient')->name('patient.')->group(function () {
+    Route::post('/{doctorId}', [\App\Http\Controllers\Patient\AppointmentController::class, 'makeAppointment'])->name('makeAppointment');
+    Route::post('/appointment/store', [App\Http\Controllers\Patient\AppointmentController::class, 'store'])->name('appointment.store');
+    Route::post('/appointment/time', [App\Http\Controllers\Patient\AppointmentController::class, 'setTime'])->name('patient.appointment.time');
+    Route::post('/info/store', [App\Http\Controllers\Patient\AppointmentController::class, 'updatePatientProfile'])->name('info.store');
+    Route::get('/info', [App\Http\Controllers\Patient\AppointmentController::class, 'getPatientInfo'])->name('info');
+    Route::get('/appointments', [App\Http\Controllers\Patient\AppointmentController::class, 'getPatientAppointments'])->name('appointments');
+    Route::post('/appointments/cancel/{id}', [App\Http\Controllers\Patient\AppointmentController::class, 'cancelAppointment'])->name('cancel');
 
 });
 

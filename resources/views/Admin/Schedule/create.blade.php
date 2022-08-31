@@ -11,7 +11,7 @@
                             @csrf
                                 <label for="startDate">Start</label>
                                 <input name="from" class="form-control" type="datetime-local" />
-                                <label for="startDate">Start</label>
+                                <label for="startDate">End</label>
                                 <input name="to" class="form-control" type="datetime-local" />
                             <label></label>
                             <select class="form-select" name="user_id" required>

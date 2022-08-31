@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 
-
 use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\Auth;
 
@@ -24,27 +23,21 @@ class SessionsController extends Controller
 
     public function store()
     {
-        $attributes=request()->validate([
-            'email'=>'required|email',
-            'password'=>'required'
+        $attributes = request()->validate([
+            'email' => 'required|email',
+            'password' => 'required'
         ]);
 
-        if(Auth::attempt($attributes))
-        {
-            $user=Auth()->user();
-            if($user->hasRole('admin'))
-            {
-               return redirect("/admin/dashboard");
-            }
-            else
-            {
+        if (Auth::attempt($attributes)) {
+            $user = Auth()->user();
+            if ($user->hasAnyRoles(['admin','doctor'])) {
+                return redirect("/admin/dashboard");
+            } else {
                 return redirect(route('home'));
             }
-        }
-        else
-        {
+        } else {
             throw ValidationException::withMessages([
-                'email'=>'Your provided credentials could not be verifed.'
+                'email' => 'Your provided credentials could not be verifed.'
             ]);
 
         }

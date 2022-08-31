@@ -13,7 +13,8 @@ class Appointment extends Model
         'doctor_id',
         'patient_id',
         'start_time',
-        'end_time'
+        'end_time',
+        'canceled'
     ];
 
     public function services()
