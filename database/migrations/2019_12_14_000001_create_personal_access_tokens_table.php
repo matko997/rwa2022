@@ -21,8 +21,6 @@ class CreatePersonalAccessTokensTable extends Migration
             $table->text('abilities')->nullable();
             $table->timestamp('last_used_at')->nullable();
             $table->timestamps();
-            $table->charset = 'utf8mb4';
-            $table->collation = 'utf8mb4_unicode_ci';
         });
     }
 

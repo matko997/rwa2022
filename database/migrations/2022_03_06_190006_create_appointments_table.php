@@ -27,8 +27,7 @@ class CreateAppointmentsTable extends Migration
 
             $table->foreign('patient_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('doctor_id')->references('id')->on('users')->onDelete('cascade');
-            $table->charset = 'utf8mb4';
-            $table->collation = 'utf8mb4_unicode_ci';
+
         });
     }
 
