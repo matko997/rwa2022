@@ -33,7 +33,7 @@ class SignupController extends Controller
 
         session()->flash('success', 'Your account has been created');
 
-        return redirect('/');
+        return redirect(route('home'));
 
 
     }
