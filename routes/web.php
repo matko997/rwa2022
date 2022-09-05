@@ -10,6 +10,7 @@ use \App\Http\Controllers\Admin\DoctorController;
 use \App\Http\Controllers\Admin\ScheduleController;
 use \App\Http\Controllers\Admin\ServiceController;
 use \App\Http\Controllers\Admin\AppointmentController;
+use Illuminate\Support\Facades\URL;
 
 
 /*
@@ -24,7 +25,7 @@ use \App\Http\Controllers\Admin\AppointmentController;
 */
 //Home page routes
 
-//URL::forceRootUrl('http://studenti.sum.ba/projekti/rwa/2022/gX');
+URL::forceRootUrl('http://studenti.sum.ba/projekti/rwa/2022/01');
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
 Route::get("/about", [HomeController::class, 'about'])->name('about');
