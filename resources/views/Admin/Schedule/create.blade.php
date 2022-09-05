@@ -20,6 +20,10 @@
                                     <option value="{{ $doctor->id }}"> {{ $doctor->name }}</option>
                                 @endforeach
                             </select>
+                            <div id="app">
+                                @include('flash-messages')
+                                @yield('content')
+                            </div>
                             <button type="submit" class="btn btn-primary mt-2">Create</button>
                         </form>
                     </div>

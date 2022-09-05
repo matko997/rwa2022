@@ -218,6 +218,10 @@
         });
     });
 
+    $(document).ready(function () {
+        $(".alert").slideDown(300).delay(4500).slideUp(500);
+    });
+
 
 </script>
 </html>

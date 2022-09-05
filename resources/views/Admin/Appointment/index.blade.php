@@ -86,7 +86,7 @@
                             @endforeach
                             </tbody>
                         </table>
-                        {{$appointments->links()}}
+                        {{$appointments->withQueryString()->links()}}
                         <div class="modal fade" id="userShowModal" tabindex="-1" aria-labelledby="exampleModalLabel"
                              aria-hidden="true">
                             <div class="modal-dialog">
@@ -122,7 +122,6 @@
                                 </div>
                             </div>
                         </div>
-
                     </div>
                 </div>
             </div>

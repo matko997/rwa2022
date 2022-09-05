@@ -69,7 +69,6 @@
                                         value="{{ $schedule->id }}"> {{ \Carbon\Carbon::parse($schedule->from)->format('H:i') }}</option>
                                 @endforeach
                             </select>
-
                             <button type="submit" class="btn btn-primary mt-2" id="checkBtn">Create</button>
                         </form>
                     </div>

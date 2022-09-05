@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Appointment;
 use App\Models\Schedule;
 use App\Models\User;
+use App\Rules\DifferenceBetweenFromAndTo;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -20,15 +20,6 @@ class ScheduleController extends Controller
      */
     public function index(Request $request)
     {
-//        $date = $request->input('datePicked');
-//        if ($date == '') {
-//            $schedules = Schedule::with('users')->paginate(10);
-//            return view('Admin.Schedule.index')->with(['schedules' => $schedules]);
-//        } else {
-//            $parsedDate = Carbon::parse($date)->format('Y-m-d');
-//            $schedules = Schedule::with('users')->whereDate('from', 'like', $parsedDate)->paginate(10);
-//            return view('Admin.Schedule.index')->with(['schedules' => $schedules]);
-//        }
 
         $date = $request->input('datePicked');
         $parsedDate = Carbon::parse($date)->format('Y-m-d');
@@ -37,9 +28,9 @@ class ScheduleController extends Controller
         $loggedInUser = User::find($loggedUserId);
         if ($date == '') {
             if ($loggedInUser->hasAnyRole('admin')) {
-                $schedules = Schedule::with('users')->whereDate('from',\Illuminate\Support\Carbon::today())->paginate(10);
+                $schedules = Schedule::with('users')->whereDate('from', \Illuminate\Support\Carbon::today())->paginate(10);
             } else {
-                $schedules = Schedule::with('users')->where('user_id', $loggedInUser)->whereDate('from',\Illuminate\Support\Carbon::today())->paginate(10);
+                $schedules = Schedule::with('users')->where('user_id', $loggedInUser)->whereDate('from', \Illuminate\Support\Carbon::today())->paginate(10);
             }
         } else {
             if ($loggedInUser->hasAnyRole('admin')) {
@@ -75,8 +66,21 @@ class ScheduleController extends Controller
      */
     public function store(Request $request)
     {
+        $from = Carbon::create($request->input('from'));
+        $to = Carbon::create($request->input('to'));
+
+        $diff = $from->diffInMinutes($to);
+        $fromMin = $from->format('i');
+        $toMin = $to->format('i');
+
+
+        if ($diff != 15 || $fromMin % 15 != 0 || $toMin % 15 != 0) {
+            return redirect()->route('admin.schedule.create')
+                ->with('error', 'Invalid date format!');
+        }
+
         Schedule::create($request->except('_token'));
-        return redirect(route('admin.schedule.index'));
+        return redirect(route('admin.schedule.index'))->with("Success", "Schedule created successfully");
 
     }
 

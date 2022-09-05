@@ -58,8 +58,7 @@ Route::prefix('admin')->middleware(['auth', 'auth.isAdminOrDoctor'])->name('admi
 });
 
 //Patient routes
-//->middleware(['auth','auth.isPatient'])
-Route::prefix('patient')->name('patient.')->group(function () {
+Route::prefix('patient')->name('patient.')->middleware(['auth','auth.isPatient'])->group(function () {
     Route::post('/{doctorId}', [\App\Http\Controllers\Patient\AppointmentController::class, 'makeAppointment'])->name('makeAppointment');
     Route::post('/appointment/store', [App\Http\Controllers\Patient\AppointmentController::class, 'store'])->name('appointment.store');
     Route::post('/appointment/time', [App\Http\Controllers\Patient\AppointmentController::class, 'setTime'])->name('patient.appointment.time');

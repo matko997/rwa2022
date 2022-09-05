@@ -14,6 +14,11 @@
 @error('email')
 <p class="text-danger small mt-1">{{$message}}</p>
 @enderror
+<label for="phoneNumber" class="form-label">Phone number</label>
+<input type="text" class="form-control" id="phoneNumber" name="phoneNumber" placeholder="Enter phone number" value="{{old('phoneNumber')}}@isset($doctor){{$doctor->phoneNumber}}@endisset @isset($patient){{$patient->phoneNumber}}@endisset">
+@error('phoneNumber')
+<p class="text-danger small mt-1">{{$message}}</p>
+@enderror
 <label for="gender" class="form-label">Gender</label>
 <div class="form-check">
     <input class="form-check-input" type="radio" name="gender" id="radioGender1" value="M" @isset($doctor){{$doctor->gender=='M' ? 'checked' : ""}}@endisset @isset($patient){{$patient->gender=='M' ? 'checked' : ""}}@endisset>

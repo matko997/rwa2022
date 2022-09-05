@@ -55,7 +55,7 @@
                             @endforeach
                             </tbody>
                         </table>
-                        {{$schedules->links()}}
+                        {{$schedules->withQueryString()->links()}}
                     </div>
                 </div>
             </div>
