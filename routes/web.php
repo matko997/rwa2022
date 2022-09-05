@@ -22,9 +22,9 @@ use \App\Http\Controllers\Admin\AppointmentController;
 | contains the "web" middleware group. Now create something great!
 |
 */
-
 //Home page routes
 
+//URL::forceRootUrl('http://studenti.sum.ba/projekti/rwa/2022/gX');
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
 Route::get("/about", [HomeController::class, 'about'])->name('about');
