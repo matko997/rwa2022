@@ -64,7 +64,7 @@ Route::prefix('patient')->name('patient.')->middleware(['auth','auth.isPatient']
     Route::post('/appointment/store', [App\Http\Controllers\Patient\AppointmentController::class, 'store'])->name('appointment.store');
     Route::post('/appointment/time', [App\Http\Controllers\Patient\AppointmentController::class, 'setTime'])->name('patient.appointment.time');
     Route::post('/info/store', [App\Http\Controllers\Patient\AppointmentController::class, 'updatePatientProfile'])->name('info.store');
-    Route::get('/info', [App\Http\Controllers\Patient\AppointmentController::class, 'getPatientInfo'])->name('info');
+    Route::get('/patient/info', [App\Http\Controllers\Patient\AppointmentController::class, 'getPatientInfo'])->name('info');
     Route::get('/appointments', [App\Http\Controllers\Patient\AppointmentController::class, 'getPatientAppointments'])->name('appointments');
     Route::post('/appointments/cancel/{id}', [App\Http\Controllers\Patient\AppointmentController::class, 'cancelAppointment'])->name('cancel');
 
