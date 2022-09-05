@@ -25,7 +25,7 @@ use Illuminate\Support\Facades\URL;
 */
 //Home page routes
 
-URL::forceRootUrl('http://studenti.sum.ba/projekti/rwa/2022/01');
+//URL::forceRootUrl('http://studenti.sum.ba/projekti/rwa/2022/01');
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
 Route::get("/about", [HomeController::class, 'about'])->name('about');
