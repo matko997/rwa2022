@@ -18,7 +18,7 @@
             <tbody>
             @foreach($appointments as $appointment)
                 <tr>
-                    <td>{{\Illuminate\Support\Carbon::create($appointment->date_created)->utcOffset(120)}}</td>
+                    <td>{{\Illuminate\Support\Carbon::create($appointment->date_created)}}</td>
                     <td>{{$appointment->doctors->name}} {{$appointment->doctors->surname}}</td>
                     <td>{{$appointment->start_time}}</td>
                     <td>{{$appointment->end_time}}</td>
