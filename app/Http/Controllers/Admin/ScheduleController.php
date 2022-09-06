@@ -28,15 +28,15 @@ class ScheduleController extends Controller
         $loggedInUser = User::find($loggedUserId);
         if ($date == '') {
             if ($loggedInUser->hasAnyRole('admin')) {
-                $schedules = Schedule::with('users')->whereDate('from', \Illuminate\Support\Carbon::today())->paginate(10);
+                $schedules = Schedule::with('users')->paginate(10);
             } else {
-                $schedules = Schedule::with('users')->where('user_id', $loggedInUser)->whereDate('from', \Illuminate\Support\Carbon::today())->paginate(10);
+                $schedules = Schedule::with('users')->where('user_id', $loggedUserId)->paginate(10);
             }
         } else {
             if ($loggedInUser->hasAnyRole('admin')) {
                 $schedules = Schedule::with('users')->whereDate('from', $parsedDate)->paginate(10);
             } else {
-                $schedules = Schedule::with('users')->whereDate('from', $parsedDate)->where('user_id', Auth::user()->id)->paginate(10);
+                $schedules = Schedule::with('users')->whereDate('from', $parsedDate)->where('user_id', $loggedUserId)->paginate(10);
             }
         }
 

@@ -19,7 +19,8 @@
 <style>
     body {
         background-image: url({{url('images/background.jpg')}});
-        background-repeat: repeat-y;
+        background-repeat: no-repeat;
+        background-attachment: fixed;
     }
     .pendingBtn {
         width: 100px;
