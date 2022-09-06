@@ -24,7 +24,7 @@ class Kernel extends ConsoleKernel
             })->get()->pluck('id');
 
             foreach ($doctors as $doctor) {
-                $now = Carbon::now();
+                $now = Carbon::tomorrow();
                 $start = Carbon::create($now->year, $now->month, $now->day, 8, 0, 0);
                 for ($i = 0; $i < 32; $i++) {
                     DB::table('schedules')->insert([
@@ -35,7 +35,7 @@ class Kernel extends ConsoleKernel
                     ]);
                 }
             }
-        })->daily();
+        })->everyMinute();
 
     }
 
