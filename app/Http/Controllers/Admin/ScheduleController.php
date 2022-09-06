@@ -74,7 +74,7 @@ class ScheduleController extends Controller
         $toMin = $to->format('i');
 
 
-        if ($diff != 15 || $fromMin % 15 != 0 || $toMin % 15 != 0) {
+        if ($diff != 15 || $fromMin % 15 != 0 || $toMin % 15 != 0 || Carbon::now()->greaterThan($from)) {
             return redirect()->route('admin.schedule.create')
                 ->with('error', 'Invalid date format!');
         }
